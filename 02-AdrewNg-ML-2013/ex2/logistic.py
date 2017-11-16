@@ -54,6 +54,15 @@ def plotBoundary(ax,x,theta):
     ax.plot(score1,score2,label='Boundary')
     ax.legend(loc='best')
 
+def predict(x,theta):
+    x = np.hstack(([1],x))
+    x = np.mat(x)
+    h = np.sum(sigmoid(x*theta))
+    if h > 0.5:
+        return 1.0
+    else:
+        return 0.0
+    
 if __name__ == '__main__':
     alpha = 0.001
     theta = np.mat([-90,1,1]).T
@@ -65,8 +74,7 @@ if __name__ == '__main__':
     x = np.hstack((np.ones((x.shape[0],1)),x))
     y = np.mat(data[:,-1]).T
     theta = decent(x,y,alpha,theta,iters)    
-    print x.shape
-    print theta
+    print predict([40,50],theta)
     plotBoundary(ax,x,theta)
     #print costFunction(x,y,theta)
     plt.show()
