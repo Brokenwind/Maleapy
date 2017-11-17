@@ -23,7 +23,7 @@ def costFunction(x,y,theta):
     y1 = np.array(sigmoid(x*theta))
     #print y1
     y0 = np.array(y)
-    cost = (1/m)*np.sum(-y0 * np.log(y1) - (1.0 - y0) * np.log(1.0 - y1))
+    cost = (-1.0/m)*np.sum(y0 * np.log(y1) + (1.0 - y0) * np.log(1.0 - y1))
     return cost
 
 def decent(x,y,alpha,theta,iters):
@@ -57,6 +57,7 @@ def plotBoundary(ax,x,theta):
 def predict(x,theta):
     x = np.hstack(([1],x))
     x = np.mat(x)
+    print ("the probability is %.3f" % (sigmoid(x*theta)))
     h = np.sum(sigmoid(x*theta))
     if h > 0.5:
         return 1.0
@@ -64,9 +65,9 @@ def predict(x,theta):
         return 0.0
     
 if __name__ == '__main__':
-    alpha = 0.001
-    theta = np.mat([-90,1,1]).T
-    iters = 10000
+    alpha = 0.015
+    theta = np.mat([0,0,0]).T
+    iters = 500000
     fig, ax = plt.subplots()
     data = np.loadtxt('ex2data1.txt',delimiter=',')
     plotScatter(ax,data)
@@ -74,7 +75,8 @@ if __name__ == '__main__':
     x = np.hstack((np.ones((x.shape[0],1)),x))
     y = np.mat(data[:,-1]).T
     theta = decent(x,y,alpha,theta,iters)    
-    print predict([40,50],theta)
+    print theta
+    print predict([45,85],theta)
     plotBoundary(ax,x,theta)
     #print costFunction(x,y,theta)
     plt.show()
