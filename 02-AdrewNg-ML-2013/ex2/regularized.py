@@ -15,7 +15,7 @@ def expandX(x,exp):
         param2 = x[:,2]
         for i in np.arange(0,index+1):
             tmp1 = np.array(np.power(param1,i))
-            tmp2 = np.array(np.power(param1,index - i))
+            tmp2 = np.array(np.power(param2,index - i))
             x = np.hstack((x,np.mat(tmp1*tmp2)))
     return x
 
@@ -31,6 +31,8 @@ def costFunction(x,y,theta,lamda):
     #print y1
     y0 = np.array(y)
     cost = (-1.0/m)*np.sum(y0 * np.log(y1) + (1.0 - y0) * np.log(1.0 - y1))
+    # the theta 0 is not involed
+    theta = np.delete(theta,0,axis=0)
     regu = np.sum(np.power(theta,2))*lamda/(2*m)
     return cost + regu
 
@@ -40,6 +42,8 @@ def decent(x,y,alpha,theta,iters,lamda):
         h = np.array(sigmoid(x*theta))
         error = h - y
         deri = (error.T * x).T + (lamda/m)*theta
+        # the theta 0 is not involed
+        deri[0,0] -= (lamda/m)*theta[0,0]
         theta = theta - (alpha/m)*deri
         iters -= 1
     return theta
@@ -77,8 +81,8 @@ def predict(x,theta):
     
 if __name__ == '__main__':
     index = 6
-    alpha = 0.0005
-    iters = 5000
+    alpha = 0.005
+    iters = 60000
     lamda = 1
     fig, ax = plt.subplots()
     data = np.loadtxt('ex2data2.txt',delimiter=',')
