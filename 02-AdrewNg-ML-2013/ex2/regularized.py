@@ -41,10 +41,10 @@ def decent(x,y,alpha,theta,iters,lamda):
     while iters > 0:
         h = np.array(sigmoid(x*theta))
         error = h - y
-        deri = (error.T * x).T + (lamda/m)*theta
+        deri = (1.0/m)*(error.T * x).T + (lamda/m)*theta
         # the theta 0 is not involed
         deri[0,0] -= (lamda/m)*theta[0,0]
-        theta = theta - (alpha/m)*deri
+        theta = theta - alpha*deri
         iters -= 1
     return theta
 
@@ -57,16 +57,16 @@ def plotScatter(ax,data):
     ax.set_ylabel('Microchip Test2')
     ax.legend(loc='best')
 
-"""
 def plotBoundary(ax,x,theta):
-    xmax = np.max(x[:,1])
-    xmin = np.min(x[:,1])
-    theta = np.array(theta.T)[0]
-    score1 = np.arange(xmin,xmax,0.1)
-    score2 = (-1.0/theta[2])*(theta[0]+theta[1]*score1)
-    ax.plot(score1,score2,label='Boundary')
+    x1 = np.linspace(-1,1.5,50)
+    x2 = np.linspace(-1,1.5,50)
+    z = np.zeros((np.size(x1),np.size(x2)))
+    for i in np.arange(0,np.size(x1)):
+        for j in np.arange(0,np.size(x2)):
+            z[i,j] = expandX(np.mat([1,x1[i],x2[j]]),6)*theta
+    x1,x2 = np.meshgrid(x1,x2)
+    ax.contour(x1,x2,z,[0],label='Boundary')
     ax.legend(loc='best')
-"""
 
 def predict(x,theta):
     x = np.hstack(([1],x))
@@ -81,9 +81,9 @@ def predict(x,theta):
     
 if __name__ == '__main__':
     index = 6
-    alpha = 0.005
-    iters = 60000
-    lamda = 1
+    alpha = 0.05
+    iters = 10000
+    lamda = 0
     fig, ax = plt.subplots()
     data = np.loadtxt('ex2data2.txt',delimiter=',')
     plotScatter(ax,data)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     theta = decent(x,y,alpha,theta,iters,lamda) 
     print theta
     predict([0.25,1.5],theta)
-    #plotBoundary(ax,x,theta)
+    plotBoundary(ax,x,theta)
     print costFunction(x,y,theta,lamda)
 
     plt.show()
