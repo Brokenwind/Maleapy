@@ -31,8 +31,8 @@ def decent(x,y,alpha,theta,iters):
     while iters > 0:
         h = np.array(sigmoid(x*theta))
         error = h - y
-        deri = (error.T * x).T
-        theta = theta - (alpha/m)*deri
+        deri = (1.0/m)*(error.T * x).T
+        theta = theta - alpha*deri
         iters -= 1
     return theta
 
@@ -65,9 +65,9 @@ def predict(x,theta):
         return 0.0
     
 if __name__ == '__main__':
-    alpha = 0.015
+    alpha = 0.03
     theta = np.mat([0,0,0]).T
-    iters = 500000
+    iters = 50000
     fig, ax = plt.subplots()
     data = np.loadtxt('ex2data1.txt',delimiter=',')
     plotScatter(ax,data)
