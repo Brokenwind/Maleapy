@@ -10,12 +10,12 @@ def expandX(x,exp):
     x: the input data(a matrix)
     exp: the max index of x. (x1^i * x2^j, i + j = exp)
     """
+    param1 = x[:,1]
+    param2 = x[:,2]
     for index in np.arange(2,exp+1):
-        param1 = x[:,1]
-        param2 = x[:,2]
         for i in np.arange(0,index+1):
-            tmp1 = np.array(np.power(param1,i))
-            tmp2 = np.array(np.power(param2,index - i))
+            tmp1 = np.array(np.power(param1,index - i))
+            tmp2 = np.array(np.power(param2,i))
             x = np.hstack((x,np.mat(tmp1*tmp2)))
     return x
 
@@ -26,7 +26,7 @@ def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
 
 def costFunction(x,y,theta,lamda):
-    m = x.shape[0]
+    m = x.shape[0] * 1.0
     y1 = np.array(sigmoid(x*theta))
     #print y1
     y0 = np.array(y)
@@ -37,14 +37,18 @@ def costFunction(x,y,theta,lamda):
     return cost + regu
 
 def decent(x,y,alpha,theta,iters,lamda):
-    m = x.shape[0]
+    # to avoid the variables is an integer
+    m = x.shape[0] * 1.0
+    lamda *= 1.0
+    alpha *= 1.0
     while iters > 0:
         h = np.array(sigmoid(x*theta))
         error = h - y
-        deri = (1.0/m)*(x.T * error) + (lamda/m)*theta
+        # ATTENTION:  (lamda/m)*theta  is not correct, the lamda/m is a integer not a float, for exmple the result  1/2 is 0 instead of 0.5!!!!!!
+        deri = (x.T * error)/m + lamda/m*theta
         # the theta 0 is not involed
         deri[0,0] -= (lamda/m)*theta[0,0]
-        theta = theta - alpha*deri
+        theta -= alpha*deri
         iters -= 1
     return theta
 
@@ -81,9 +85,9 @@ def predict(x,theta):
     
 if __name__ == '__main__':
     index = 6
-    alpha = 0.05
-    iters = 10000
-    lamda = 0
+    alpha = 0.9
+    iters = 5000
+    lamda = 1
     fig, ax = plt.subplots()
     data = np.loadtxt('ex2data2.txt',delimiter=',')
     plotScatter(ax,data)

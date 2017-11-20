@@ -1,0 +1,5 @@
+ATTENTION:  
+1.  If lamda and m all are integers, then lamda/m is also a integer instead of a float, for exmple the result  1/2 is 0 instead of 0.5!!!!!!. YOU MUST BE CAREFUL WITH THIS. When  computed derivative of cost funtion i use fowllowing formula:
+    deri = (x.T * error)/m + (lamda/m)*theta
+obviously, it is wrong when lamda and m is integer.
+
