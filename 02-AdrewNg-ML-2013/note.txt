@@ -1,0 +1,15 @@
+ATTENTION:  
+1.  If lamda and m all are integers, then lamda/m is also a integer instead of a float, for exmple the result  1/2 is 0 instead of 0.5!!!!!!. YOU MUST BE CAREFUL WITH THIS. When  computed derivative of cost funtion i use fowllowing formula:
+    deri = (x.T * error)/m + (lamda/m)*theta
+obviously, it is wrong when lamda and m is integer.
+
+2. when you chose learning rate alpha, you'd better 0.3 0.03 and 0.9 0.09 and so on
+
+3. it will run faster if just use np.narray to do computation instead of np.matrix
+
+4.  define a function as following :
+    def change(data):
+       data[0,0] = 10
+
+    if one is a 3*3 matrix, and if we call the function, and we will find the a[0,0] has been changed to 10
+
