@@ -31,7 +31,7 @@ def decent(x,y,alpha,theta,iters):
     while iters > 0:
         h = np.array(sigmoid(x*theta))
         error = h - y
-        deri = (1.0/m)*(error.T * x).T
+        deri = (1.0/m)*(x.T * error)
         theta = theta - alpha*deri
         iters -= 1
     return theta
