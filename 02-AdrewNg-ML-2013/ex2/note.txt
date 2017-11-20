@@ -3,3 +3,6 @@ ATTENTION:
     deri = (x.T * error)/m + (lamda/m)*theta
 obviously, it is wrong when lamda and m is integer.
 
+2. when you chose learning rate alpha, you'd better 0.3 0.03 and 0.9 0.09 and so on
+
+3. it will run faster if just use np.narray to do computation instead of np.matrix

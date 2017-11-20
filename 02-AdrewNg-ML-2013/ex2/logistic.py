@@ -6,12 +6,6 @@ import matplotlib
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-data = np.loadtxt('ex2data1.txt',delimiter=',')
-x = np.mat(np.delete(data,-1,axis=1))
-x = np.hstack((np.ones((x.shape[0],1)),x))
-y = np.mat(data[:,-1]).T
-m,n = x.shape
-
 def sigmoid(z):
     """sigmoid(z)
     z: It can be a array, a narray, a vector and a matrix
@@ -30,7 +24,7 @@ def costDer(theta):
     """
     h = np.array(sigmoid(x*theta))
     error = h - y
-    deri = (1.0/m)*(x.T * error)
+    deri = (x.T * error)/m
     return deri
 
 def decent(alpha,theta,iters):
@@ -70,11 +64,17 @@ def predict(x0,theta):
         return 1.0
     else:
         return 0.0
+
+data = np.loadtxt('ex2data1.txt',delimiter=',')
+x = np.mat(np.delete(data,-1,axis=1))
+x = np.hstack((np.ones((x.shape[0],1)),x))
+y = np.mat(data[:,-1]).T
+m,n = x.shape
     
 if __name__ == '__main__':
-    alpha = 0.009
+    alpha = 0.043
     theta = np.mat(np.zeros((n,1)))
-    iters = 100000
+    iters = 1000000
     fig, ax = plt.subplots()
     plotScatter(ax)
     theta = decent(alpha,theta,iters)    
