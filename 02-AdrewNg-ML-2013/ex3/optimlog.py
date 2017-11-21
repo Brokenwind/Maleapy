@@ -72,7 +72,6 @@ def optimSolve(theta,x,y,reg=False,lamda=0.0):
     lamda *= 1.0
     theta = theta.flatten()
     res = op.minimize(fun = costFunc, x0 = theta,args = (x, y,reg,lamda),method = 'TNC',jac = gradient);
-    print (res)
     # use BFGS minimization algorithm. but it will not work well because costFunc may return a NaN value
     #print op.fmin_bfgs(costFunc, initial_theta, args = (x,y), fprime=gradient)
     return res.x
