@@ -1,8 +1,10 @@
+import sys
+sys.path.append('..')
 import numpy as np
 import scipy.optimize as op
 import matplotlib
 from matplotlib import pyplot as plt
-from optimlog import *
+from ex2.optimlog import *
 
 def predict(x,theta):
     n = theta.size
