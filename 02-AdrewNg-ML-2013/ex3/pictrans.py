@@ -27,7 +27,7 @@ def showImage(data):
     plt.show()
     """
     img = matrixToImage(data)
-    img.show()    
+    img.show()
     """
 
 def  randomShow():
@@ -52,10 +52,14 @@ def  randomShow():
     plt.show()
     
 if __name__ == '__main__':
-    """
-    filename = 'lena.jpg'
-    data = imageToMatrix(filename)
-    showImage(data)
+    filename = './digit/10.png'
+    image = plt.imread(filename)  
+    plt.imshow(image)  
+    plt.axis('off')
+    plt.show()  
+
+    #data = imageToMatrix(filename)
+    #showImage(data)
     #img.save('lena_1.bmp')
-    """
-    randomShow()
+
+    #randomShow()

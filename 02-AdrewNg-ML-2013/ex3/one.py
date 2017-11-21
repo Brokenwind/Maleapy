@@ -5,12 +5,13 @@ import scipy.optimize as op
 import matplotlib
 from matplotlib import pyplot as plt
 from ex2.optimlog import *
+from pictrans import *
 
 def proba(x,theta):
     """calculate probability of x  with the calculated theta
     """
     n = theta.size
-    x = np.reshape(x,(1,np.size(x)))
+    x = x.flatten()
     theta = theta.reshape((n,1))
     if x.size +1 == n:
         x = np.hstack(([1],x))
@@ -33,20 +34,11 @@ def predict(x,theta):
             res = i
     return res
 
-if __name__ == '__main__':
-    # size of given pictures
-    wid = 20
-    hei = 20
-    pixs = wid * hei
+def oneVsAll(x,y):
+    lamda = 0.1
     #10 labels, from 1 to 10 
     labels = 10
-    lamda = 0.1
-    # load and rearrange data
-    x = np.loadtxt('x.txt')
-    x = np.hstack((np.ones((np.size(x,0),1)),x))
     m, n = x.shape
-    y = np.loadtxt('y.txt')
-
     # all_res will be expanded to a 11 * n(n is 1 plus the number pixels of picture) matrix, which will store all calculated parameters
     # all_res[0,:] is redundant
     # all_res[i,:] ( 1 <= i <= 10 ) will store the  calculated parameters of label i
@@ -60,6 +52,36 @@ if __name__ == '__main__':
         res = res.reshape((1,n))
         # add  classifier parameters of the current label
         all_res = np.vstack((all_res,res))
-    print predict(x[100,:],all_res)
-    
+    return all_res
+
+def showRes(x,theta,num):
+    fig,ax = plt.subplots(1,2)
+    # random select num digits
+    rnd = np.random.randint(1,5000,num)
+    sels = x[rnd,:]
+    sels = np.delete(sels,0,axis=1)
+    for i in np.arange(0,num):
+        # show original hand-written digit
+        pic = sels[i,:].reshape((20,20))
+        ax[0].imshow(pic, cmap=plt.cm.gray)
+        # show normal digit
+        res = predict(sels[i,:],theta)
+        res = int(res)
+        filename = "./digit/"+str(res)+".png"
+        img = plt.imread(filename)  
+        ax[1].imshow(img)
+    # adjust the space between pictues to 0
+    #plt.subplots_adjust(hspace=0)
+    plt.axis('off')
+    plt.show()
+
+
+if __name__ == '__main__':
+    # load and rearrange data
+    x = np.loadtxt('x.txt')
+    x = np.hstack((np.ones((np.size(x,0),1)),x))
+    y = np.loadtxt('y.txt')
+    theta = oneVsAll(x,y)
+    showRes(x,theta,1)
+    #print predict(x[100,:],theta)
     
