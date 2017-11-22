@@ -29,7 +29,7 @@ def forward(x,y,thetas):
         z = a.dot(theta.T)
         # sigmoid(z) is the final output of current level, and it will be the input of next level
         a = sigmoid(z) 
-    return z,a
+    return a
 
 
 def predict(x,y,thetas):
@@ -38,7 +38,7 @@ def predict(x,y,thetas):
     y: the output of test data
     thetas: it is a list of classifier parameters of each level.
     """
-    z,res = forward(x,y,thetas)
+    res = forward(x,y,thetas)
     # col index of the max probality of each row
     pos = np.argmax(res,axis=1)
     # predicted values of each row of X
@@ -61,24 +61,26 @@ def expandY(y,n):
     for i in np.arange(0,m):
         yres[i] = yset[y[i]]
     return yres
-    
-def costFunc(x,y,thetas,reg=False,lamda=0.0):
+
+def costFuncOld(x,y,thetas,reg=False,lamda=0.0):
     """
+    This function is deprecated, and doesn't use vectorization. You'd better to use  function costFun.
+
     x: the input test data
     y: the label of relative x
     thetas: a list of all levels of estimated  value of unknown parameter
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    z,res = forward(x,y,thetas)
+    res = forward(x,y,thetas)
     m,n = res.shape
     # m: the number row of result
     # n: the number of class
     y = expandY(y,n)
     J = 0.0
     for i in np.arange(0,m):
-        """the computation of cost function of each y(i)  is simmilar to the logistic regression cost function.And you can compare it with the function costFunc in ex2/optimlog.py
-        """
+        #the computation of cost function of each y(i)  is simmilar to the logistic regression cost function.
+        #And you can compare it with the function costFunc in ex2/optimlog.py
         y1 = res[i,:]
         y0 = y[i,:]
         # when the y0 = 1, the cost function is as following:
@@ -98,7 +100,39 @@ def costFunc(x,y,thetas,reg=False,lamda=0.0):
             for i in np.arange(0,row):
                 regSum += np.sum(theta[i] * theta[i])
             J += lamda/(2.0*m)*regSum
-
+            
+    return J
+    
+def costFunc(x,y,thetas,reg=False,lamda=0.0):
+    """
+    x: the input test data
+    y: the label of relative x
+    thetas: a list of all levels of estimated  value of unknown parameter
+    reg: if it is True, means using regularized logistic. Default False
+    lamda: it is used when reg=True
+    """
+    yh = forward(x,y,thetas)
+    m,n = yh.shape
+    # m: the number row of result
+    # n: the number of class
+    y = expandY(y,n)
+    # vectorize the real value and predicted result
+    y = y.flatten()
+    yh = yh.flatten()
+    #the computation of cost function of each y(i)  is simmilar to the logistic regression cost function.
+    #And you can compare it with the function costFunc in ex2/optimlog.py
+    # when the y = 1, the cost function is as following:
+    pos = np.log(yh)
+    # when the y = 0, the cost function is as following:
+    neg = np.log(1-yh)
+    all = y * pos + (1 - y) * neg
+    J = -np.sum(all)/m
+    #reg: if it is True, means using regularized logistic
+    if reg:
+        for theta in thetas:
+            theta = theta.flatten()
+            J += lamda/(2.0*m)*(np.sum(theta * theta))
+            
     return J
 
 
@@ -134,4 +168,5 @@ if __name__ == '__main__':
     theta2 = np.loadtxt(path+'theta2.txt')
     #print predict(x,y,[theta1,theta2])
     #expandY(y,10)
+    print costFunc(x,y,[theta1,theta2])
     print costFunc(x,y,[theta1,theta2],reg=True,lamda=1.0)
