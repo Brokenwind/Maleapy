@@ -8,7 +8,29 @@ from matplotlib import pyplot as plt
 from ex2.optimlog import *
 from ex3.pictrans import *
 
-def forward(x,y,thetas):
+def reshapeTheta(ftheta,units):
+    """ reshape flattened ftheta
+    """
+    thetas = []
+    start = 0
+    end = 0
+    for i in np.arange(1,len(units)):
+        lin = units[i-1] + 1
+        lout = units[i]
+        end = start + lin * lout
+        thetas.append( np.reshape(ftheta[start:end],(lout,lin)))
+        start = end
+    return thetas
+
+def flattenTheta(thetas):
+    """flatten the thetas
+    """
+    ftheta = np.array([])
+    for i in range(0,m):
+        ftheta = np.hstack( (ftheta,thetas[i].flatten()) )
+    return ftheta 
+    
+def forward(x,y,thetas,units):
     """forward(x,y,thetas)
     x: the input of test data
     y: the output of test data
@@ -28,6 +50,10 @@ def forward(x,y,thetas):
     # the z of level 1 has nothing.
     zlist.append(0)
     alist.append(a)
+
+    if  isinstance(thetas,np.ndarray):
+        thetas = reshapeTheta(thetas,units)
+
     for theta in thetas:
         # add extra bias unit of current input(previos ouput)
         a = np.hstack((bias,a))
@@ -41,7 +67,7 @@ def forward(x,y,thetas):
     return a,zlist,alist
 
 
-def predict(x,y,thetas):
+def predict(x,y,thetas,units):
     """predict(x,y,thetas)
     x: the input of test data
     y: the output of test data
@@ -71,7 +97,7 @@ def expandY(y,n):
         yres[i] = yset[y[i]]
     return yres
 
-def costFuncOld(x,y,thetas,reg=False,lamda=0.0):
+def costFuncOld(x,y,thetas,units,reg=False,lamda=0.0):
     """
     This function is deprecated, and doesn't use vectorization. You'd better to use  function costFun.
 
@@ -81,7 +107,7 @@ def costFuncOld(x,y,thetas,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    res,_,_ = forward(x,y,thetas)
+    res,_,_ = forward(x,y,thetas,units)
     m,n = res.shape
     # m: the number row of result
     # n: the number of class
@@ -112,7 +138,7 @@ def costFuncOld(x,y,thetas,reg=False,lamda=0.0):
             
     return J
     
-def costFunc(x,y,thetas,reg=False,lamda=0.0):
+def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
     """
     x: the input test data
     y: the label of relative x
@@ -120,7 +146,7 @@ def costFunc(x,y,thetas,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    yh,_,_ = forward(x,y,thetas)
+    yh,_,_ = forward(x,y,thetas,units)
     m,n = yh.shape
     # m: the number row of result
     # n: the number of class
@@ -143,6 +169,7 @@ def costFunc(x,y,thetas,reg=False,lamda=0.0):
                 theta = theta.flatten()
                 J += lamda/(2.0*m)*(np.sum(theta * theta))
         if  isinstance(thetas,np.ndarray):
+            print thetas.shape
             J += lamda/(2.0*m)*(np.sum(thetas * thetas))
 
     return J
@@ -178,7 +205,8 @@ if __name__ == '__main__':
     y = np.loadtxt(path+'y.txt')
     theta1 = np.loadtxt(path+'theta1.txt')
     theta2 = np.loadtxt(path+'theta2.txt')
+    units = [400, 25, 10]
     #print predict(x,y,[theta1,theta2])
     #expandY(y,10)
-    print costFunc(x,y,[theta1,theta2])
-    print costFunc(x,y,[theta1,theta2],reg=True,lamda=1.0)
+    print costFunc(x,y,[theta1,theta2],units)
+    print costFunc(x,y,[theta1,theta2],units,reg=True,lamda=1.0)
