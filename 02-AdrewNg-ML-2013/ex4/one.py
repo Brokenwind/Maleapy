@@ -14,7 +14,7 @@ def forward(x,y,thetas):
     y: the output of test data
     thetas: it is a list of classifier parameters of each level.
 
-    Return: the middle value of final result z and the final result a
+    Return: the  final result a and all middle value z
     """
     # a is the output of previos level, and it is the input of current level
     a = x
@@ -22,6 +22,12 @@ def forward(x,y,thetas):
     m = np.size(a,0)
     #extra bias unit
     bias = np.ones((m,1))
+    # store the middle value during calculating
+    alist = []
+    zlist = []
+    # the z of level 1 has nothing.
+    zlist.append(0)
+    alist.append(a)
     for theta in thetas:
         # add extra bias unit of current input(previos ouput)
         a = np.hstack((bias,a))
@@ -29,7 +35,10 @@ def forward(x,y,thetas):
         z = a.dot(theta.T)
         # sigmoid(z) is the final output of current level, and it will be the input of next level
         a = sigmoid(z) 
-    return a
+        zlist.append(z)
+        alist.append(a)
+
+    return a,zlist,alist
 
 
 def predict(x,y,thetas):
@@ -38,7 +47,7 @@ def predict(x,y,thetas):
     y: the output of test data
     thetas: it is a list of classifier parameters of each level.
     """
-    res = forward(x,y,thetas)
+    res,_,_ = forward(x,y,thetas)
     # col index of the max probality of each row
     pos = np.argmax(res,axis=1)
     # predicted values of each row of X
@@ -72,7 +81,7 @@ def costFuncOld(x,y,thetas,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    res = forward(x,y,thetas)
+    res,_,_ = forward(x,y,thetas)
     m,n = res.shape
     # m: the number row of result
     # n: the number of class
@@ -111,7 +120,7 @@ def costFunc(x,y,thetas,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    yh = forward(x,y,thetas)
+    yh,_,_ = forward(x,y,thetas)
     m,n = yh.shape
     # m: the number row of result
     # n: the number of class
@@ -129,10 +138,13 @@ def costFunc(x,y,thetas,reg=False,lamda=0.0):
     J = -np.sum(all)/m
     #reg: if it is True, means using regularized logistic
     if reg:
-        for theta in thetas:
-            theta = theta.flatten()
-            J += lamda/(2.0*m)*(np.sum(theta * theta))
-            
+        if  isinstance(thetas,list):
+            for theta in thetas:
+                theta = theta.flatten()
+                J += lamda/(2.0*m)*(np.sum(theta * theta))
+        if  isinstance(thetas,np.ndarray):
+            J += lamda/(2.0*m)*(np.sum(thetas * thetas))
+
     return J
 
 
