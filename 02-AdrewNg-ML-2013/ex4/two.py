@@ -197,7 +197,8 @@ if __name__ == '__main__':
     if status:
         ltheta = reshapeList(res,units)
         for i in range(0,len(ltheta)):
-            ltheta[i].tofile('theta'+str(i+1)+'.txt')
+            name = 'theta'+str(i+1)+'.txt'
+            np.savetxt(name,ltheta[i])
         pred = predict(res,x,y,units)
         m,n = x.shape
         rate = sum(np.ones(m)[pred==y])*1.0/m
