@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from ex2.optimlog import *
 from ex3.pictrans import *
 
-def reshapeTheta(ftheta,units):
+def reshapeList(ftheta,units):
     """ reshape flattened ftheta
     """
     thetas = []
@@ -22,16 +22,16 @@ def reshapeTheta(ftheta,units):
         start = end
     return thetas
 
-def flattenTheta(thetas):
+def flattenList(thetas):
     """flatten the thetas
     """
     ftheta = np.array([])
-    for i in range(0,m):
+    for i in range(0,len(thetas)):
         ftheta = np.hstack( (ftheta,thetas[i].flatten()) )
     return ftheta 
     
-def forward(x,y,thetas,units):
-    """forward(x,y,thetas)
+def forward(thetas,x,y,units):
+    """forward(thetas,x,y)
     x: the input of test data
     y: the output of test data
     thetas: it is a list of classifier parameters of each level.
@@ -52,7 +52,7 @@ def forward(x,y,thetas,units):
     alist.append(a)
 
     if  isinstance(thetas,np.ndarray):
-        thetas = reshapeTheta(thetas,units)
+        thetas = reshapeList(thetas,units)
 
     for theta in thetas:
         # add extra bias unit of current input(previos ouput)
@@ -67,13 +67,13 @@ def forward(x,y,thetas,units):
     return a,zlist,alist
 
 
-def predict(x,y,thetas,units):
-    """predict(x,y,thetas)
+def predict(thetas,x,y,units):
+    """predict(thetas,x,y)
     x: the input of test data
     y: the output of test data
     thetas: it is a list of classifier parameters of each level.
     """
-    res,_,_ = forward(x,y,thetas)
+    res,_,_ = forward(thetas,x,y,units)
     # col index of the max probality of each row
     pos = np.argmax(res,axis=1)
     # predicted values of each row of X
@@ -97,7 +97,7 @@ def expandY(y,n):
         yres[i] = yset[y[i]]
     return yres
 
-def costFuncOld(x,y,thetas,units,reg=False,lamda=0.0):
+def costFuncOld(thetas,x,y,units,reg=False,lamda=0.0):
     """
     This function is deprecated, and doesn't use vectorization. You'd better to use  function costFun.
 
@@ -107,7 +107,7 @@ def costFuncOld(x,y,thetas,units,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    res,_,_ = forward(x,y,thetas,units)
+    res,_,_ = forward(thetas,x,y,units)
     m,n = res.shape
     # m: the number row of result
     # n: the number of class
@@ -137,7 +137,7 @@ def costFuncOld(x,y,thetas,units,reg=False,lamda=0.0):
             J += lamda/(2.0*m)*regSum
     return J
     
-def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
+def costFunc(thetas,x,y,units,reg=False,lamda=0.0):
     """
     x: the input test data
     y: the label of relative x
@@ -145,7 +145,7 @@ def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
     reg: if it is True, means using regularized logistic. Default False
     lamda: it is used when reg=True
     """
-    yh,_,_ = forward(x,y,thetas,units)
+    yh,_,_ = forward(thetas,x,y,units)
     m,n = yh.shape
     # m: the number row of result
     # n: the number of class
@@ -164,7 +164,7 @@ def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
     #reg: if it is True, means using regularized logistic
     if reg:
         if  isinstance(thetas,np.ndarray):
-            thetas = reshapeTheta(thetas,units)
+            thetas = reshapeList(thetas,units)
         for theta in thetas:
             # the first col of theta is not involed in calculation
             zero = np.zeros((np.size(theta,0),1))
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     theta1 = np.loadtxt(path+'theta1.txt')
     theta2 = np.loadtxt(path+'theta2.txt')
     units = [400, 25, 10]
-    #print predict(x,y,[theta1,theta2])
+    print predict([theta1,theta2],x,y,[400,25,10])
     #expandY(y,10)
-    print costFunc(x,y,[theta1,theta2],units)
-    print costFunc(x,y,[theta1,theta2],units,reg=True,lamda=1.0)
+    #print costFunc([theta1,theta2],x,y,units)
+    #print costFunc([theta1,theta2],x,y,units,reg=True,lamda=1.0)

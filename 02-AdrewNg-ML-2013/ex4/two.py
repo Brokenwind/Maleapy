@@ -29,14 +29,17 @@ def randInit(lin,lout):
     return np.random.rand(lout,lin+1) * epsilon - epsilon
 
 def initTheta(units):
-    thetas = []
+    """initialize the theta with given units
+    """
+    thetas = np.array([])
     for i in np.arange(1,len(units)):
         lin = units[i-1]
         lout = units[i]
-        thetas.append( randInit(lin,lout) )
+        theta = randInit(lin,lout).flatten()
+        thetas = np.hstack( (thetas,theta) )
     return thetas
 
-def backward(x,y,thetas,units,reg=True,lamda=0.0):
+def backward(thetas,x,y,units,reg=True,lamda=0.0):
     """backward(x,y,units,reg=True,lamda=0.0)
     Implement the backpropagation algorithm to compute the gradient for the neural network cost function.
     x,y: the input data
@@ -44,12 +47,14 @@ def backward(x,y,thetas,units,reg=True,lamda=0.0):
     reg: if it is True, means using regularized neural networks
     lamda: it will be used when reg is True
     """
+    if isinstance(thetas,np.ndarray):
+        thetas = reshapeList(thetas,units)
     # --------------------------------STEP 0--------------------------------
     m = np.size(x,0)
     # the number of output  class
     labnum = units[len(units)-1]
     # --------------------------------STEP 1--------------------------------
-    yh,zlist,alist = forward(x,y,thetas,units)
+    yh,zlist,alist = forward(thetas,x,y,units)
     # ------------------------------STEP (2,3)------------------------------
     levels = len(alist)
     errlist = levels * [None]
@@ -76,18 +81,17 @@ def backward(x,y,thetas,units,reg=True,lamda=0.0):
         deltas[i] = (errlist[i+1].T).dot(a)
         grads[i] = 1.0/m * deltas[i]
     # --------------------------------STEP 5--------------------------------
-
     if reg:
         for i in range(0,len(thetas)):
             theta = thetas[i]
             # the first col of theta is not involed in calculation
             zero = np.zeros((np.size(theta,0),1))
             theta = np.hstack((zero,theta[:,1:]))
-            grads[i] =  deltas[i] + lamda/m * theta
+            grads[i] =  grads[i] + lamda/m * theta
+            
+    return flattenList(grads)
 
-    return grads
-
-def numericalGradient(x,y,thetas,units,reg=False,lamda=0.0):
+def numericalGradient(thetas,x,y,units,reg=False,lamda=0.0):
     check = 1e-4
     m = len(thetas)
     # stores the shape of each element of thetas
@@ -104,21 +108,14 @@ def numericalGradient(x,y,thetas,units,reg=False,lamda=0.0):
     for i in range(0,thetanum):
         tmp = ftheta[i]
         ftheta[i] = tmp + check
-        up = costFunc(x,y,ftheta,units,reg,lamda)
+        up = costFunc(ftheta,x,y,units,reg,lamda)
         ftheta[i] = tmp - check
-        down = costFunc(x,y,ftheta,units,reg,lamda)
+        down = costFunc(ftheta,x,y,units,reg,lamda)
         numegrad[i] = (up - down)/(2.0*check)
         # restore the ftheta
         ftheta[i] = tmp
-    # reshape the flattened numegrad
-    grads = m * [None]
-    start = 0
-    for i in range(0,m):
-        row,col = shapes[i]
-        end = start + row * col
-        grads[i] = np.reshape(numegrad[start:end],(row,col))
-        start = end
-    return grads
+
+    return numegrad
 
 def debugInit(lin,lout):
     """
@@ -153,14 +150,26 @@ def checkGradient(reg=False,lamda = 0.0):
     # Reusing debugInitializeWeights to generate X
     x = debugInit(units[0]-1, m)
     y = 1 + np.mod(np.arange(1,m+1),level)
-    gra1 = backward(x,y,thetas,units,reg,lamda)
-    gra2 = numericalGradient(x,y,thetas,units,reg,lamda)
+    """
+    gra1 = backward(thetas,x,y,units,reg,lamda)
+    gra2 = numericalGradient(thetas,x,y,units,reg,lamda)
     fgra1 = np.array([])
     fgra2 = np.array([])
     for i in range(0,len(gra1)):
         fgra1 = np.hstack((fgra1,gra1[i].flatten()))
         fgra2 = np.hstack((fgra2,gra2[i].flatten()))
+    """
+    fgra1 = backward(thetas,x,y,units,reg,lamda)
+    fgra2 = numericalGradient(thetas,x,y,units,reg,lamda)
     return norm(fgra1 - fgra2)/norm(fgra1 + fgra2)
+
+def optimSolve(theta,x,y,units,reg=False,lamda=0.0):
+    lamda *= 1.0
+    theta = theta.flatten()
+    res = op.minimize(fun = costFunc, x0 = theta,args = (x, y,units,reg,lamda),method = 'TNC',jac = backward);
+    # use BFGS minimization algorithm. but it will not work well because costFunc may return a NaN value
+    #print op.fmin_bfgs(costFunc, initial_theta, args = (x,y), fprime=gradient)
+    return res.success,res.x
 
 if __name__ == '__main__':
     path='../ex3/'
@@ -169,20 +178,30 @@ if __name__ == '__main__':
     #x = np.hstack((np.ones((np.size(x,0),1)),x))
     y = np.loadtxt(path+'y.txt')
     units = [400,25,10]
-    theta1 = np.loadtxt(path+'theta1.txt')
-    theta2 = np.loadtxt(path+'theta2.txt')
-    #print predict(x,y,[theta1,theta2])
+    #theta1 = np.loadtxt(path+'theta1.txt')
+    #theta2 = np.loadtxt(path+'theta2.txt')
+    #print predict([theta1,theta2],x,y)
     #expandY(y,10)
-    #print costFunc(x,y,[theta1,theta2],units)
-    #thetas = np.array([])
-    #thetas = np.hstack((thetas,theta1.flatten()))
-    #thetas = np.hstack((thetas,theta2.flatten()))
-    #print costFunc(x,y,thetas,units)
-    #print costFunc(x,y,[theta1,theta2],reg=True,lamda=1.0)
+    #print costFunc([theta1,theta2],x,y,units)
+    #print costFunc(thetas,x,y,units)
+    #print costFunc([theta1,theta2],x,y,reg=True,lamda=1.0)
     #print randInit(4,5)
-        # initialize thetas
-    gra1 = backward(x,y,thetas,units,reg=False,lamda=0.0)
-    #gra2 = numericalGradient(x,y,thetas,units,reg=False,lamda=0.0)
+    #thetas = initTheta(units)
+    #gra1 = backward(thetas,x,y,units,reg=False,lamda=0.0)
+    #gra2 = numericalGradient(thetas,x,y,units,reg=False,lamda=0.0)
     #print debugInit(4,3)
     #print checkGradient(True,3.0)
-    #print checkGradient()
+    # print checkGradient()
+    thetas = initTheta(units)
+    status, res = optimSolve(thetas,x,y,units,True,1.0)
+    if status:
+        ltheta = reshapeList(res,units)
+        for i in range(0,len(ltheta)):
+            ltheta[i].tofile('theta'+str(i+1)+'.txt')
+        pred = predict(res,x,y,units)
+        m,n = x.shape
+        rate = sum(np.ones(m)[pred==y])*1.0/m
+        print ('The accuracy rate is : %.4f' % (rate))
+    else:
+        print (' Can not converge, please try again!')
+
