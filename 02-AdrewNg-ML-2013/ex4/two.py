@@ -28,6 +28,14 @@ def randInit(lin,lout):
     #epsilon = np.sqrt(6)/(np.sqrt(lin) + np.sqrt(lout))
     return np.random.rand(lout,lin+1) * epsilon - epsilon
 
+def initTheta(units):
+    thetas = []
+    for i in np.arange(1,len(units)):
+        lin = units[i-1]
+        lout = units[i]
+        thetas.append( randInit(lin,lout) )
+    return thetas
+
 def backward(x,y,thetas,units,reg=True,lamda=0.0):
     """backward(x,y,units,reg=True,lamda=0.0)
     Implement the backpropagation algorithm to compute the gradient for the neural network cost function.
@@ -52,9 +60,9 @@ def backward(x,y,thetas,units,reg=True,lamda=0.0):
         if lev == levels - 1:
             errlist[lev] = yh - expandY(y,labnum)
         else:
+    # --------------------------------STEP 3--------------------------------
             z = zlist[lev]
             err = errlist[lev+1].dot(thetas[lev])
-    # --------------------------------STEP 3--------------------------------
             err = err[:,1:] * sigmoidGrad(z)
             errlist[lev] = err
     # --------------------------------STEP 4--------------------------------
@@ -65,10 +73,9 @@ def backward(x,y,thetas,units,reg=True,lamda=0.0):
         a = alist[i]
         # when we use forward propatation algorithm to compute one specified level, we will use the output of last level a as the input, but it needs to be added bias col. So when we  compute delta conversely, the relative a should add a col of bias too.
         a = np.hstack((one,a))
-        delta = (errlist[i+1].T).dot(a)
-        deltas[i] = delta
+        deltas[i] = (errlist[i+1].T).dot(a)
+        grads[i] = 1.0/m * deltas[i]
     # --------------------------------STEP 5--------------------------------
-        grads[i] = 1.0/m * delta
 
     if reg:
         for i in range(0,len(thetas)):
@@ -76,7 +83,7 @@ def backward(x,y,thetas,units,reg=True,lamda=0.0):
             # the first col of theta is not involed in calculation
             zero = np.zeros((np.size(theta,0),1))
             theta = np.hstack((zero,theta[:,1:]))
-            grads[i] = grads[i] + lamda/m * theta
+            grads[i] =  deltas[i] + lamda/m * theta
 
     return grads
 
@@ -133,7 +140,7 @@ def debugInit(lin,lout):
 def norm(x,p=2):
     return np.sum(np.abs(x) ** p) ** (1.0/p)
 
-def checkGradient(lamda = 0.0):
+def checkGradient(reg=False,lamda = 0.0):
     m = 5
     units = [3,5,3]
     thetas = []
@@ -142,15 +149,12 @@ def checkGradient(lamda = 0.0):
         lin = units[i-1]
         lout = units[i]
         thetas.append( debugInit(lin,lout) )
-        print thetas[i-1]
 
     # Reusing debugInitializeWeights to generate X
     x = debugInit(units[0]-1, m)
     y = 1 + np.mod(np.arange(1,m+1),level)
-    gra1 = backward(x,y,thetas,units,reg=False,lamda=0.0)
-    gra2 = numericalGradient(x,y,thetas,units,reg=False,lamda=0.0)
-    print gra1
-    print gra2
+    gra1 = backward(x,y,thetas,units,reg,lamda)
+    gra2 = numericalGradient(x,y,thetas,units,reg,lamda)
     fgra1 = np.array([])
     fgra2 = np.array([])
     for i in range(0,len(gra1)):
@@ -177,12 +181,8 @@ if __name__ == '__main__':
     #print costFunc(x,y,[theta1,theta2],reg=True,lamda=1.0)
     #print randInit(4,5)
         # initialize thetas
-    thetas = []
-    for i in np.arange(1,len(units)):
-        lin = units[i-1]
-        lout = units[i]
-        thetas.append( randInit(lin,lout) )
-    #gra1 = backward(x,y,thetas,units,reg=False,lamda=0.0)
-    #gra2 = numericalGradient(x,y,thetas,reg=False,lamda=0.0)
+    gra1 = backward(x,y,thetas,units,reg=False,lamda=0.0)
+    #gra2 = numericalGradient(x,y,thetas,units,reg=False,lamda=0.0)
     #print debugInit(4,3)
-    print checkGradient()
+    #print checkGradient(True,3.0)
+    #print checkGradient()

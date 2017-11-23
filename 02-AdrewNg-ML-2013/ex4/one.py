@@ -135,7 +135,6 @@ def costFuncOld(x,y,thetas,units,reg=False,lamda=0.0):
             for i in np.arange(0,row):
                 regSum += np.sum(theta[i] * theta[i])
             J += lamda/(2.0*m)*regSum
-            
     return J
     
 def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
@@ -164,13 +163,14 @@ def costFunc(x,y,thetas,units,reg=False,lamda=0.0):
     J = -np.sum(all)/m
     #reg: if it is True, means using regularized logistic
     if reg:
-        if  isinstance(thetas,list):
-            for theta in thetas:
-                theta = theta.flatten()
-                J += lamda/(2.0*m)*(np.sum(theta * theta))
         if  isinstance(thetas,np.ndarray):
-            print thetas.shape
-            J += lamda/(2.0*m)*(np.sum(thetas * thetas))
+            thetas = reshapeTheta(thetas,units)
+        for theta in thetas:
+            # the first col of theta is not involed in calculation
+            zero = np.zeros((np.size(theta,0),1))
+            theta = np.hstack((zero,theta[:,1:]))
+            theta = theta.flatten()
+            J += lamda/(2.0*m)*(np.sum(theta * theta))
 
     return J
 
