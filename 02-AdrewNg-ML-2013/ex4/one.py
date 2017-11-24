@@ -175,27 +175,6 @@ def costFunc(thetas,x,y,units,reg=False,lamda=0.0):
     return J
 
 
-def showRes(x,theta,num):
-    fig,ax = plt.subplots(1,2)
-    # random select num digits
-    rnd = np.random.randint(1,5000,num)
-    sels = x[rnd,:]
-    sels = np.delete(sels,0,axis=1)
-    for i in np.arange(0,num):
-        # show original hand-written digit
-        pic = sels[i,:].reshape((20,20))
-        ax[0].imshow(pic, cmap=plt.cm.gray)
-        # show normal digit
-        res = predict(sels[i,:],theta)
-        res = int(res)
-        filename = "./digit/"+str(res)+".png"
-        img = plt.imread(filename)  
-        ax[1].imshow(img)
-    # adjust the space between pictues to 0
-    #plt.subplots_adjust(hspace=0)
-    plt.axis('off')
-    plt.show()
-
 
 if __name__ == '__main__':
     path='../ex3/'
