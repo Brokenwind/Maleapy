@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt     
 from matplotlib import animation     
+from one import *
 from two import *
 
 """It will randomly select some test data and calculate its predicted result, then show original hand-written picture ,correct answer and predicted result at same time.
