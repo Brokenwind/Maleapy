@@ -64,8 +64,10 @@ if __name__ == '__main__':
 
     theta,j = gradientSolve(theta,mx,my,alpha,iters)
     print theta
-    theta = optimSolve(theta,mx,my)
-    print theta 
+    status,theta = optimSolve(theta,mx,my)
+    if not status:
+        print "Can not converge!"
+        print theta 
     print predict(theta,[20])
     # plot the  predict values
     theta = theta.reshape((theta.size,1))
