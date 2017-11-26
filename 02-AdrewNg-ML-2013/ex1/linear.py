@@ -48,6 +48,13 @@ def costFunc(theta,x,y,reg=False,lamda=0.0):
         J += lamda/(2.0*m)*regSum
     return J;
 
+def normalEqnSolve(x,y):
+    x = np.mat(x)
+    y = np.mat(y).T
+    res = (x.T * x).I * (x.T * y)
+    return np.array(res).flatten()
+
+
 def gradientSolve(theta,x,y,alpha,iters,reg=False,lamda=0.0):
     """
     Use gradient decent method to compute parameters
@@ -55,6 +62,7 @@ def gradientSolve(theta,x,y,alpha,iters,reg=False,lamda=0.0):
     lamda *= 1.0
     alpha *= 1.0
     jhistory = []
+    theta = theta.flatten()
     while iters > 0:
         deri = gradient(theta,x,y,reg,lamda)
         theta = theta - alpha*deri
@@ -65,10 +73,10 @@ def gradientSolve(theta,x,y,alpha,iters,reg=False,lamda=0.0):
 def optimSolve(theta,x,y,reg=False,lamda=0.0):
     lamda *= 1.0
     theta = theta.flatten()
-    res = op.minimize(fun = costFunc, x0 = theta,args = (x, y,reg,lamda),method = 'TNC',jac = gradient);
+    res = op.minimize(fun = costFunc, x0 = theta,args = (x, y,reg,lamda),method = 'TNC',jac = gradient)
     # use BFGS minimization algorithm. but it will not work well because costFunc may return a NaN value
     #print op.fmin_bfgs(costFunc, initial_theta, args = (x,y), fprime=gradient)
-    return res.x
+    return res.success,res.x
 
 # pridict the the value for the given x, according to the calculated  theta
 def predict(theta,x):
