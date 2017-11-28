@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 from ex1.linear import *
+from leacurve import *
 
 def polyFeatures(x,p):
     m = x.size
@@ -37,16 +38,16 @@ def showCurve(ax,theta,mean,std):
     ax.plot(x,yh)
 
 if __name__ == '__main__':
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(3)
     p = 8
     x = np.loadtxt('x.txt')
     y = np.loadtxt('y.txt')
     xval = np.loadtxt('xval.txt')
     yval = np.loadtxt('yval.txt')
     # plot the scatter of original data
-    ax.scatter(x,y,c='r',marker='x',label='Original')
-    ax.set_xlabel('change in water level')
-    ax.set_ylabel('water flowing out of the dam')
+    ax[0].scatter(x,y,c='r',marker='x',label='Original')
+    ax[0].set_xlabel('change in water level')
+    ax[0].set_ylabel('water flowing out of the dam')
     ex =  polyFeatures(x,p)
     ex,mean,std =  normalization(ex)
     one = np.ones((np.size(ex,0),1))
@@ -58,6 +59,24 @@ if __name__ == '__main__':
     print status
     print theta
     # show the result curve
-    showCurve(ax,theta,mean,std)
+    showCurve(ax[0],theta,mean,std)
+
+    # show learning curve
+    exval =  polyFeatures(xval,p)
+    exval,_,_ =  normalization(exval)
+    one = np.ones((np.size(exval,0),1))
+    exval = np.hstack((one,exval))
+    errtrain,errval = leacurve(ex,y,exval,yval,0.0)
+    xtick = range(1,m+1)
+    ax[1].plot(xtick,errtrain,label='Train')
+    ax[1].plot(xtick,errval,label='Cross validation')
+    ax[1].legend(loc='best')
+
+    # show relationship between error and lamda
+    lamdas = np.array([0, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
+    errtrain,errval = errAndLamda(ex,y,exval,yval,lamdas)
+    ax[2].plot(lamdas,errtrain,label='Train')
+    ax[2].plot(lamdas,errval,label='Cross validation')
+    ax[2].legend(loc='best')
     
     plt.show()
