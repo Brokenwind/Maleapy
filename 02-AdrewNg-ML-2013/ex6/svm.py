@@ -37,6 +37,7 @@ def svmtrain(x, y, c, kernelFunc, args={},tol=1e-3, iters=5):
     """
     m,n = x.shape
     # map 0 to -1
+    y = y.copy()
     y[y==0] = -1
     alphas = np.zeros(m)
     b = 0
@@ -110,7 +111,33 @@ def svmtrain(x, y, c, kernelFunc, args={},tol=1e-3, iters=5):
     model['b'] = b
     model['alphas'] = alphas[sel]
     model['w'] = (alphas * y).dot(x)
+    model['args'] = args
     return model
+
+def svmPredict(model,x):
+    """
+    p = svmPredict(model, x) returns a vector of predictions using a trained SVM model (svmTrain). 
+    x is a mxn matrix where there each example is a row. 
+    model is a svm model returned from svmTrain.
+    predictions p is a row of predictions of {0, 1} values.
+    """
+    x = np.array(x)
+    if x.ndim == 1:
+        x = x.reshape((1,x.size))
+    m,n = x.shape
+    p = np.zeros(m)
+    kernelFunc = model['kernelFunc']
+    if kernelFunc.func_name == 'linearKernel':
+        p = model['w'].dot(x.T) + model['b']
+    else:
+        for i in range(0,m):
+            pred = 0
+            for j in range(0,np.size(model['x'],0)):
+                pred += model['alphas'][j] * model['y'][j] * kernelFunc(x[i],model['x'][j],**model['args'])
+            p[i] = pred + model['b']
+    p[p>=0] = 1
+    p[p<0] = 0
+    return p.flatten()
 
 if __name__ == '__main__':
     x1 = np.array([1,2,1])
