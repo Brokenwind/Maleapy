@@ -5,7 +5,6 @@ import scipy.optimize as op
 import matplotlib
 from matplotlib import pyplot as plt
 from svm import *
-from boundary import *
 
 def plotScatter(ax,x,y):
     pos = x[y == 0]
@@ -33,5 +32,5 @@ if __name__ == '__main__':
     # use different C to calculate model
     for c in [1,10,100]:
         model = svmtrain(x1,y1,c,linearKernel,tol=1e-3,iters=20)
-        linearBoundary(ax,x1,y1,model['w'],model['b'])
+        linearBoundary(ax,x1,model)
     plt.show()
