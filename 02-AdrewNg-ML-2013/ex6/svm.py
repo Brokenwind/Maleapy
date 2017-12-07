@@ -2,6 +2,9 @@ import sys
 sys.path.append('..')
 import numpy as np
 import scipy.optimize as op
+import matplotlib
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def linearKernel(x1,x2):
     """returns a linear kernel between x1 and x2
@@ -138,6 +141,42 @@ def svmPredict(model,x):
     p[p>=0] = 1
     p[p<0] = 0
     return p.flatten()
+
+def linearBoundary(ax,x,model):
+    w = model['w']
+    b = model['b']
+    x1 = np.linspace(np.min(x[:,0]),np.max(x[:,0]),100)
+    x2 = -(w[0]*x1 + b)/w[1]
+    ax.plot(x1,x2,label='Boundary')
+    ax.legend(loc='best')
+
+def curveBoundary(ax,x,model):
+    num = 100
+    x1 = np.linspace(np.min(x[:,0]),np.max(x[:,0]),num)
+    x2 = np.linspace(np.min(x[:,1]),np.max(x[:,1]),num)
+    z = np.zeros((num,num))
+    """
+    # Attention: it was wrong 
+    for i in np.arange(0,x1.size):
+        for j in np.arange(0,x2.size):
+            z[i,j] =  svmPredict(model,[x1[i],x2[j]])
+        print z[i]
+    """
+    x1,x2 = np.meshgrid(x1,x2)
+    
+    """
+    # This is correct
+    for i in np.arange(0,num):
+        xp = np.vstack((x1[:,i],x2[:,i])).T
+        z[:,i] = svmPredict(model,xp)
+        print z[:,i]
+    """
+    for i in np.arange(0,num):
+        xp = np.vstack((x1[i],x2[i])).T
+        z[i] = svmPredict(model,xp)
+
+    ax.contour(x1,x2,z,[0],label='Boundary')
+    ax.legend(loc='best')
 
 if __name__ == '__main__':
     x1 = np.array([1,2,1])
