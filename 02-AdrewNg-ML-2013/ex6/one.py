@@ -21,13 +21,17 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     x1 = np.loadtxt(path+'x1.txt')
     y1 = np.loadtxt(path+'y1.txt')
-    m = x1.size
-    ex1 = x1.reshape((m,1))
-    ex1 = np.hstack((np.ones((m,1)),ex1))
-    theta = np.ones(2)
+    m,n = x1.shape
     plotScatter(ax,x1,y1)
+    
+    # predict result with calculated model
+    #model = svmtrain(x1,y1,1,gaussianKernel,tol=1e-3,iters=20)
+    model = svmtrain(x1,y1,1,linearKernel,tol=1e-3,iters=20)
+    yp = svmPredict(model,x1)
+    print ('accury rate: %.2f' % (sum(y1==yp)*1.0/m))
+
+    # use different C to calculate model
     for c in [1,10,100]:
         model = svmtrain(x1,y1,c,linearKernel,tol=1e-3,iters=20)
-        print model
         linearBoundary(ax,x1,y1,model['w'],model['b'])
     plt.show()
