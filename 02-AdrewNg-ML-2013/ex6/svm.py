@@ -23,7 +23,7 @@ def kernels(x,kernelFunc,**args):
             k[j][i] = k[i,j]
     return k
 
-def svmtrain(x, y, c, kernelFunc, tol=1e-3, iters=5):
+def svmtrain(x, y, c, kernelFunc, args={},tol=1e-3, iters=5):
     """[model] = svmtrain(X, Y, C, kernelFunc, tol, iters)
     svmtrain trains an SVM classifier using a simplified version of the SMO algorithm. 
     PARAMETERS:
@@ -45,7 +45,7 @@ def svmtrain(x, y, c, kernelFunc, tol=1e-3, iters=5):
     L = 0
     H = 0
     iter = 0
-    k = kernels(x,kernelFunc)
+    k = kernels(x,kernelFunc,**args)
     while iter < iters:
         changed = 0
         for i in range(0,m):
@@ -96,13 +96,12 @@ def svmtrain(x, y, c, kernelFunc, tol=1e-3, iters=5):
                     b = (b1+b2)/2
                 changed += 1
                 # end if
-            if changed == 0:
-                iter += 1
-            else:
-                iter = 0
         # end for loop
+        if changed == 0:
+            iter += 1
+        else:
+            iter = 0
     # end of while
-    print iter
     sel = alphas > 0
     model = {}
     model['x'] = x[sel]
@@ -119,5 +118,5 @@ if __name__ == '__main__':
     print gaussianKernel(x1,x2,2)
     print gaussianKernel(1,0)
     x1 = np.arange(1,13).reshape((4,3))
-    print kernels(x1,gaussianKernel,sigma=2.0)
-    #print kernels(x1,linearKernel)
+    print kernels(x1,gaussianKernel,sigma=4.0)
+    print kernels(x1,linearKernel)
