@@ -13,6 +13,12 @@ def normalize(x):
     norm = (x - mean)/std
     return norm,mean,std
 
+def revernorm(x,mean,std):
+    """
+    The reverse operation of nomalization
+    """
+    return mean + (x * std)
+
 def pca(x):
     """
     computes eigenvectors of the covariance matrix of X
