@@ -42,7 +42,7 @@ def plotBoundary(ax,x,theta):
             ex = expandX(tmp,6)
             z[i,j] =  ex.dot(theta)
     x1,x2 = np.meshgrid(x1,x2)
-    ax.contour(x1,x2,z,[0],label='Boundary')
+    ax.contour(x1,x2,z.T,[0],label='Boundary')
     ax.legend(loc='best')
 
 def predict(x,theta):

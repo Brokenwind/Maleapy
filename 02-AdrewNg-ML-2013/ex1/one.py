@@ -25,7 +25,8 @@ def visualCost3D(x,y):
     fig = plt.figure()
     ax = Axes3D(fig)
     x,y = np.meshgrid(theta0,theta1)
-    ax.plot_surface(x,y,jvals,cmap='rainbow')
+    # transpose jvals before calling contour, or else the axes will be flipped
+    ax.plot_surface(x,y,jvals.T,cmap='rainbow')
     ax.set_title('Cost Function Surface')
 
 def contour(res,x,y):
