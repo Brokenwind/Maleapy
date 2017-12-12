@@ -54,22 +54,27 @@ def oneVsAll(x,y):
         all_res = np.vstack((all_res,res))
     return all_res
 
-def showRes(x,theta,num):
-    fig,ax = plt.subplots(1,2)
+def showRes(x,y,theta):
+    fig,ax = plt.subplots(1,3)
     # random select num digits
-    rnd = np.random.randint(1,5000,num)
-    sels = x[rnd,:]
-    sels = np.delete(sels,0,axis=1)
-    for i in np.arange(0,num):
-        # show original hand-written digit
-        pic = sels[i,:].reshape((20,20))
-        ax[0].imshow(pic, cmap=plt.cm.gray)
-        # show normal digit
-        res = predict(sels[i,:],theta)
-        res = int(res)
-        filename = "./digit/"+str(res)+".png"
-        img = plt.imread(filename)  
-        ax[1].imshow(img)
+    rnd = np.random.randint(1,5000,1)
+    sel = x[rnd,1:]
+    # show original hand-written digit
+    pic = sel.reshape((20,20))
+    ax[0].imshow(pic, cmap=plt.cm.gray)
+    ax[0].set_title('Hand-Written')
+    # show correct digit
+    filename = "./digit/"+str(int(y[rnd]))+".png"
+    img = plt.imread(filename)
+    ax[1].imshow(img)
+    ax[1].set_title('Corret')
+    # show normal digit
+    res = predict(sel,theta)
+    res = int(res)
+    filename = "./digit/"+str(res)+".png"
+    img = plt.imread(filename)
+    ax[2].imshow(img)
+    ax[2].set_title('Predicted')
     # adjust the space between pictues to 0
     #plt.subplots_adjust(hspace=0)
     plt.axis('off')
@@ -82,6 +87,6 @@ if __name__ == '__main__':
     x = np.hstack((np.ones((np.size(x,0),1)),x))
     y = np.loadtxt('y.txt')
     theta = oneVsAll(x,y)
-    showRes(x,theta,1)
+    showRes(x,y,theta)
     #print predict(x[100,:],theta)
     
