@@ -29,6 +29,7 @@ def visualCost3D(x,y):
     ax.set_title('Cost Function Surface')
 
 def contour(res,x,y):
+    fig,ax = plt.subplots()
     res = res.flatten()
     theta0 = np.linspace(-10,10,200)
     theta1 = np.linspace(-1,4,200)
@@ -37,10 +38,10 @@ def contour(res,x,y):
         for j in np.arange(0,theta1.size):
             theta = np.hstack((theta0[i],theta1[j])).T
             jvals[i,j] = costFunc(theta,x,y)
-    fig,ax = plt.subplots()
     x,y = np.meshgrid(theta0,theta1)
     ax.scatter(res[0],res[1])
-    ax.contour(x,y,jvals,np.logspace(-2,2,50))
+    # transpose jvals before calling contour, or else the axes will be flipped
+    ax.contour(x,y,jvals.T,np.logspace(-2,2,50))
     ax.set_title('Contour of Cost Function')
     
 
@@ -71,6 +72,7 @@ if __name__ == '__main__':
     print predict(theta,[20])
     # plot the  predict values
     theta = theta.reshape((theta.size,1))
+
     ax[0].plot(x,mx.dot(theta))
     ax[0].set_title('Original scatterplot and Predict line')
 
@@ -80,6 +82,7 @@ if __name__ == '__main__':
 
     #print predict(theta,3500)
     visualCost3D(mx,my)
+
     contour(theta,mx,my)
     plt.show()
     
