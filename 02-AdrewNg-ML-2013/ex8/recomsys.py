@@ -74,6 +74,7 @@ def checkGradient():
     num_movie,num_user = r.shape
     num_feature = np.size(theta,1)
     params = np.hstack((x.flatten(),theta.flatten()))
+
     fgra1 = gradient(params,y,r,num_movie,num_user,num_feature,lamda)
     fgra2 = numericalGradient(params,y,r,num_movie,num_user,num_feature,lamda)
     print ('The bellow two columns you get should be very similar:')
@@ -104,7 +105,20 @@ def optimSolve(params,y,r,num_movie,num_user,num_feature,lamda=0.0):
     #print op.fmin_bfgs(costFunc, initial_theta, args = (x,y), fprime=gradient)
     return res.success,res.x
 
-
+def nomalizeRating(y,r):
+    """
+    normalized Y so that each movie has a rating of 0 on average, and returns the mean rating in Ymean.
+    """
+    m,n = y.shape
+    ymean = np.zeros(m)
+    ynorm = np.zeros(y.shape)
+    sel = r == 1
+    for i in range(0,m):
+        idx = r[i] == 1
+        ymean[i] = np.mean(y[i,idx])
+        ynorm[i,idx] = y[i,idx] - ymean[i]
+    return ynorm,ymean
+    
 
 """
 if __name__ == '__main__':
