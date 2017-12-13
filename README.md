@@ -17,8 +17,8 @@ ex1: Linear Regression
 * Linear regression with one variable
 ![](https://github.com/Brokenwind/Maleapy/blob/master/imgdocs/images/ex1_one1.png) 
 <figure class="half">
-    <img src="https://github.com/Brokenwind/Maleapy/blob/master/imgdocs/images/ex1_one2.png"/>
-    <img src="https://github.com/Brokenwind/Maleapy/blob/master/imgdocs/images/ex1_one3.png"/>
+    <img src="https://github.com/Brokenwind/Maleapy/blob/master/imgdocs/images/ex1_one2.png" width="50%"/>
+    <img src="https://github.com/Brokenwind/Maleapy/blob/master/imgdocs/images/ex1_one3.png" width="50%"/>
 </figure>
 
 * Linear regression with multiple variables
