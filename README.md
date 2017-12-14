@@ -53,5 +53,5 @@
 * ### Neural Networks
 > This part of the exercise implemented a neural network to recognize handwritten digits using the same training set as before. The neural network can be able to represent complex models that form non-linear hypotheses. 
 
-** The accuracy rate of neural network on training set is : **
+The accuracy rate of neural network on training set is :
 ![](imgdocs/images/ex3_two1.png)
