@@ -56,6 +56,10 @@
 The accuracy rate of neural network on training set is :
 ![](imgdocs/images/ex3_two1.png)
 
+showed predictions dynamicly (animate.py):
+
+![](imgdocs/images/ex3_two2.gif)
+
 ---
 
 ## Exercise4: Neural Networks Learning
@@ -66,7 +70,7 @@ The accuracy rate of neural network on training set is :
 
 ![](imgdocs/images/ex4_one1.png)
 
-Selected 100 pictures to predict and showed results dynamicly:
+Selected 100 pictures to predict and showed results dynamicly (animate.py):
 
 ![](imgdocs/images/ex4_one2.gif)
 
