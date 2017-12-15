@@ -161,7 +161,10 @@ def checkGradient(reg=False,lamda = 0.0):
     """
     fgra1 = backward(thetas,x,y,units,reg,lamda)
     fgra2 = numericalGradient(thetas,x,y,units,reg,lamda)
-    return norm(fgra1 - fgra2)/norm(fgra1 + fgra2)
+    print np.vstack((fgra1,fgra2)).T
+    diff = norm(fgra1 - fgra2)/norm(fgra1 + fgra2)
+    print ("Evaluate the norm of the difference between two solutions: %e" % (diff))
+    return diff
 
 def optimSolve(theta,x,y,units,reg=False,lamda=0.0):
     lamda *= 1.0
@@ -191,7 +194,7 @@ if __name__ == '__main__':
     #gra2 = numericalGradient(thetas,x,y,units,reg=False,lamda=0.0)
     #print debugInit(4,3)
     #print checkGradient(True,3.0)
-    # print checkGradient()
+    print checkGradient()
     thetas = initTheta(units)
     status, res = optimSolve(thetas,x,y,units,True,1.0)
     if status:

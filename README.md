@@ -71,4 +71,12 @@ Selected 100 pictures to predict and showed results dynamicly:
 ![](imgdocs/images/ex4_one2.gif)
 
 * ### Backpropagation
-> Implemented the backpropagation algorithm to compute the gradient for the neural network cost function.
+> Implemented the backpropagation algorithm to compute the gradient for the neural network cost function. And then performed gradient checking to validate backpropagation.
+
+This the the result of gradient checking:
+
+![](imgdocs/images/ex4_two1.png)
+
+At last we get parameters and the accuracy rate with these parameters:
+
+![](imgdocs/images/ex4_two2.png)
