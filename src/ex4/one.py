@@ -185,7 +185,10 @@ if __name__ == '__main__':
     theta1 = np.loadtxt(path+'theta1.txt')
     theta2 = np.loadtxt(path+'theta2.txt')
     units = [400, 25, 10]
+    print ('The predicted values are:')
     print predict([theta1,theta2],x,y,[400,25,10])
-    #expandY(y,10)
-    #print costFunc([theta1,theta2],x,y,units)
-    #print costFunc([theta1,theta2],x,y,units,reg=True,lamda=1.0)
+    expandY(y,10)
+    print ('test output of unregularized cost function:')
+    print costFunc([theta1,theta2],x,y,units)
+    print ('test output of regularized cost function:')
+    print costFunc([theta1,theta2],x,y,units,reg=True,lamda=1.0)

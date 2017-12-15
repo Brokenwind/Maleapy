@@ -73,9 +73,9 @@ if __name__ == '__main__':
     row,col = x.shape
     # initialize theta with zero vector
     theta = np.ones(col)
-    res = optimSolve(theta,x,y,reg=True,lamda=lamda)
-    print costFunc(theta,x,y,reg=True,lamda=lamda)
     #predict([0.25,1.5],res)
-    plotBoundary(ax,x,res)
+    for lamda in [0,1,100]:
+        res = optimSolve(theta,x,y,reg=True,lamda=lamda)        
+        plotBoundary(ax,x,res)
 
     plt.show()
