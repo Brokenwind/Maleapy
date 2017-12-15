@@ -85,8 +85,10 @@ At last we get parameters and the accuracy rate with these parameters:
 
 ![](imgdocs/images/ex4_two2.png)
 
-## Exercise5: Neural Networks Learning
-> #### Implemented the backpropagation algorithm for neural networks and applied it to the task of hand-written digit recognition.
+---
+
+## Exercise5: Regularized Linear Regression and Bias v.s. Variance
+> #### implement regularized linear regression and use it to study models with different bias-variance properties.
 
 * ### Regularized Linear Regression
 > Implemented regularized linear regression to predict the amount of water flowing out of a dam using the change of water level in a reservoir. 
@@ -101,12 +103,41 @@ At last we get parameters and the accuracy rate with these parameters:
 * ### Polynomial regression
 > The problem with our linear model was that it was too simple for the data and resulted in underfitting (high bias). In this part of the exercise, I addressed this problem by adding more features using polynomial regression.
 
-Polynomial fit, λ = 1:
+Polynomial fit, λ = 1 (It did't fit well):
 ![](imgdocs/images/ex5_three1.png)
 
-Polynomial learning curve, λ = 0:
+Polynomial learning curve, λ = 0 (overfitting (high-variance)):
 ![](imgdocs/images/ex5_three2.png)
 
 Selecting λ using a cross validation set:
 (A good choice of λ=1 can provide a good fit to the data.)
 ![](imgdocs/images/ex5_three3.png)
+
+---
+
+## Exercise6: Regularized Linear Regression and Bias v.s. Variance
+> #### Implemented support vector machines (SVMs), and then used it to build a spam classifier.
+
+* ### Support Vector Machines
+> Implemented support vector machines (SVMs) and used it with various example 2D datasets. Experimenting with these datasets helped me gain an intuition of how SVMs work and how to use a Gaussian kernel with SVMs.  
+
+Different values of the C parameter with linear kernel SVMs.
+![](imgdocs/images/ex6_one1.png)
+
+Used Gaussian Kernel SVMs to do non-linear classification.
+![](imgdocs/images/ex6_two1.png)
+
+Used the cross validation set Xval, yval to determine the best C and σ parameter to use:
+
+![](imgdocs/images/ex6_three0.png)
+![](imgdocs/images/ex6_three2.png)
+
+Used the best C and σ parameter to plot the boudary
+
+![](imgdocs/images/ex6_three1.png)
+
+* ### Spam Classification
+> Many email services today provide spam filters that are able to classify emails into spam and non-spam email with high accuracy. In this part of the exercise, I used SVMs to build my own spam filter. 
+
+The accuracy of model on training dataset and test dataset repsectively.
+![](imgdocs/images/ex6_four1.png)
