@@ -65,7 +65,9 @@ The accuracy rate of neural network on training set is :
 > Implemented and tested the regularized cost function and feedforward propagation.
 
 ![](imgdocs/images/ex4_one1.png)
+
 Selected 100 pictures to predict and showed results dynamicly:
+
 ![](imgdocs/images/ex4_one2.gif)
 
 * ### Backpropagation
