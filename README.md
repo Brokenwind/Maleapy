@@ -84,3 +84,29 @@ This the the result of gradient checking:
 At last we get parameters and the accuracy rate with these parameters:
 
 ![](imgdocs/images/ex4_two2.png)
+
+## Exercise5: Neural Networks Learning
+> #### Implemented the backpropagation algorithm for neural networks and applied it to the task of hand-written digit recognition.
+
+* ### Regularized Linear Regression
+> Implemented regularized linear regression to predict the amount of water flowing out of a dam using the change of water level in a reservoir. 
+
+![](imgdocs/images/ex5_one1.png)
+
+* ### Bias-variance
+> An important concept in machine learning is the bias-variance tradeoff. Models with high bias are not complex enough for the data and tend to underfit, while models with high variance overfit to the training data. In this part of the exercise, I ploted training and test errors on a learning curve to diagnose bias-variance problems.
+
+![](imgdocs/images/ex5_two1.png)
+
+* ### Polynomial regression
+> The problem with our linear model was that it was too simple for the data and resulted in underfitting (high bias). In this part of the exercise, I addressed this problem by adding more features using polynomial regression.
+
+Polynomial fit, λ = 1:
+![](imgdocs/images/ex5_three1.png)
+
+Polynomial learning curve, λ = 0:
+![](imgdocs/images/ex5_three2.png)
+
+Selecting λ using a cross validation set:
+(A good choice of λ=1 can provide a good fit to the data.)
+![](imgdocs/images/ex5_three3.png)
