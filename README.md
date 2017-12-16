@@ -1,5 +1,5 @@
 # Maleapy
-### Some simple exercises of Machine Learning with python
+### The exercises of Machine Learning   programmed with python
 
 ---
 
@@ -176,3 +176,32 @@ Dimension reduced  face images
 
 Reconstructed face images 
 ![](imgdocs/images/ex7_four4.png)
+
+___
+
+## Exercise8: Anomaly Detection and Recommender Systems
+> #### Implemented the anomaly detection algorithm and apply it to detect failing servers on a network. And then implemented collaborative filtering to build a recommender system for movies. 
+
+* ### Anomaly detection
+> Implemented an anomaly detection algorithm to detect
+anomalous behavior in server computers. 
+
+Estimated parameters for a Gaussian and selected the threshold:
+![](imgdocs/images/ex8_one1.png)
+
+The Gaussian distribution contours of the distribution fit to the dataset:
+![](imgdocs/images/ex8_one2.png)
+
+Runned the implemented anomaly detection algorithm on a more realistic dataset:
+![](imgdocs/images/ex8_two1.png)
+
+* ### Recommender Systems
+> Implemented the collaborative filtering learning algorithm and applied it to a dataset of movie ratings. This dataset
+consists of ratings on a scale of 1 to 5. The dataset has nu = 943 users, and nm = 1682 movies.
+
+Implemented cost function and gradient:
+![](imgdocs/images/ex8_three1.png)
+![](imgdocs/images/ex8_three2.png)
+
+Trained the algorithm to make movie recommendations:
+![](imgdocs/images/ex8_four1.png)
