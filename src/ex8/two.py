@@ -11,7 +11,6 @@ if __name__ == '__main__':
     m,n = x.shape
     # estimate parameters of gaussian distribution
     mu,sigma = paramEstimate(x)
-    print sigma
     # calculate gaussian distribution on trainning data
     p =  gaussian(x,mu,sigma)
     # calculate gaussian distribution on validation data

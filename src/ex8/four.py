@@ -56,7 +56,7 @@ if __name__ == '__main__':
     params = np.hstack((X.flatten(),Theta.flatten()))
 
     Ynorm,Ymean = nomalizeRating(Y,R)
-    status,params = optimSolve(params,Ynorm,R,num_movie,num_user,num_feature,lamda=10.0)
+    status,params = optimSolve(params,Y,R,num_movie,num_user,num_feature,lamda=10.0)
     print ('The learned features are:')
     X = params[0:num_movie*num_feature].reshape((num_movie,num_feature))
     print X
@@ -67,7 +67,14 @@ if __name__ == '__main__':
     #After training the model, you can now make recommendations by computing the predictions matrix.
     p = X.dot( Theta.T )
     my_pred = p[:,0] + Ymean
+    idx = np.argsort(my_pred)[::-1]
+    print('Top recommendations for you:')
+    for i in idx[0:10]:
+        print( ' Predicted rating: %.1f , for %s' % ( my_pred[i],movies[i] ))
+
+    """
     for i in range(0,len(movies)):
         if my_ratings[i] > 0 :
             print( 'Original rating: %d, Predicted rating: %.1f , for %s' % ( my_ratings[i], my_pred[i],movies[i] ) )
+    """
     print Ymean

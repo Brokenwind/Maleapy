@@ -13,17 +13,19 @@ if __name__ == '__main__':
     ax.scatter(x[:,0],x[:,1],c='b',marker='x')
     # estimate parameters of gaussian distribution
     mu,sigma = paramEstimate(x)
-    print sigma
+    print ("The estimated mu:" )
+    print (mu)
+    print ("The estimated sigma:")
+    print (sigma)
     # calculate gaussian distribution on trainning data
     p =  gaussian(x,mu,sigma)
-    # visualize the gaussian distribution
-    visualize(ax,x,mu,sigma)
     # calculate gaussian distribution on validation data
     pval = gaussian(xval,mu,sigma)
     # select a best epsilon
-    print threshold(yval,pval)
     epsilon,F1 = threshold(yval,pval)
-    print epsilon
+    print ("The best epsilon is %f, and the F1 is %f" % (epsilon,F1))
+    # visualize the gaussian distribution
+    visualize(ax,x,mu,sigma)
     outlier = x[p < epsilon]
     ax.scatter(outlier[:,0],outlier[:,1],c='r',marker='o')
     plt.show()    
