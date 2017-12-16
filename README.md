@@ -115,7 +115,7 @@ Selecting λ using a cross validation set:
 
 ---
 
-## Exercise6: Regularized Linear Regression and Bias v.s. Variance
+## Exercise6: Support Vector Machines
 > #### Implemented support vector machines (SVMs), and then used it to build a spam classifier.
 
 * ### Support Vector Machines
@@ -141,3 +141,38 @@ Used the best C and σ parameter to plot the boudary
 
 The accuracy of model on training dataset and test dataset repsectively.
 ![](imgdocs/images/ex6_four1.png)
+
+---
+
+## Exercise7: K-means Clustering and Principal Component Analysis
+> #### Implemented the K-means clustering algorithm and apply it to compress an image.And used principal component analysis to find a low-dimensional representation of face images.
+
+* ### K-means Clustering
+> Implemented the K-means algorithm and use it for image compression.
+
+Runned the K-means algorithm on a toy 2D dataset
+![](imgdocs/images/ex7_one1.png)
+
+Applied K-means to image compression
+![](imgdocs/images/ex7_two1.png)
+
+* ### Principal Component Analysis
+> Implemented principal component analysis (PCA) and used it to perform dimensionality reduction. 
+
+Experimented with an example 2D dataset to get intuition on how PCA works:
+![](imgdocs/images/ex7_three1.png)
+
+* ### Use PCA on face image dataset
+> Runned PCA on face images to see how it can be used in practice for dimension reduction.
+
+Original face images 
+![](imgdocs/images/ex7_four1.png)
+
+Normalized face images
+![](imgdocs/images/ex7_four2.png)
+
+Dimension reduced  face images 
+![](imgdocs/images/ex7_four3.png)
+
+Reconstructed face images 
+![](imgdocs/images/ex7_four4.png)
