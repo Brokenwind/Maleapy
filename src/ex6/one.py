@@ -27,7 +27,7 @@ if __name__ == '__main__':
     #model = svmtrain(x1,y1,1,gaussianKernel,tol=1e-3,iters=20)
     model = svmtrain(x1,y1,1,linearKernel,tol=1e-3,iters=20)
     yp = svmPredict(model,x1)
-    print ('accury rate: %.2f' % (sum(y1==yp)*1.0/m))
+    print ('accuracy rate: %.2f' % (sum(y1==yp)*1.0/m))
 
     # use different C to calculate model
     for c in [1,10,100]:

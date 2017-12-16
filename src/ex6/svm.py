@@ -115,6 +115,7 @@ def svmtrain(x, y, c, kernelFunc, args={},tol=1e-3, iters=5):
     model['alphas'] = alphas[sel]
     model['w'] = (alphas * y).dot(x)
     model['args'] = args
+    model['C'] = c
     return model
 
 def svmPredict(model,x):
@@ -147,7 +148,7 @@ def linearBoundary(ax,x,model):
     b = model['b']
     x1 = np.linspace(np.min(x[:,0]),np.max(x[:,0]),100)
     x2 = -(w[0]*x1 + b)/w[1]
-    ax.plot(x1,x2,label='Boundary')
+    ax.plot(x1,x2,label='Boundary(C='+str(model['C'])+')')
     ax.legend(loc='best')
 
 def curveBoundary(ax,x,model):

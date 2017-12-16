@@ -61,7 +61,7 @@ if __name__ == '__main__':
     # predict result with calculated model
     model = svmtrain(x3,y3,c,gaussianKernel,args={'sigma':sigma},tol=1e-3,iters=5)
     yp = svmPredict(model,x3)
-    print ('accury rate: %.2f' % (sum(y3==yp)*1.0/m))
+    print ('accuracy rate: %.2f' % (sum(y3==yp)*1.0/m))
     curveBoundary(ax,x3,model)
 
     """

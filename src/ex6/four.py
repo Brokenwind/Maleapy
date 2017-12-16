@@ -21,8 +21,8 @@ if __name__ == '__main__':
     np.savez('model.npz',w=model['w'],b=model['b'])
     m = y.size
     yp = svmPredict(model,x)
-    print ('accury rate: %.2f' % (sum(y==yp)*1.0/m))
+    print ('accuray rate on training dataset: %.2f' % (sum(y==yp)*1.0/m))
 
     m = yt.size
     yp = svmPredict(model,xt)
-    print ('accury rate: %.2f' % (sum(yt==yp)*1.0/m))
+    print ('accury rate on test dataset: %.2f' % (sum(yt==yp)*1.0/m))

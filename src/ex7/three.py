@@ -12,9 +12,10 @@ if __name__ == '__main__':
     x = ex7data1['X']
     m,n = x.shape
     ax[0].scatter(x[:,0],x[:,1],c='b',marker='o')
+    ax[0].set_title('Original Data')
     norm,mean,std = normalize(x)
     ax[1].scatter(norm[:,0],norm[:,1],c='b',marker='o')
-
+    ax[1].set_title('Normalized Data')
     u,s = pca(norm)
     z = project(norm,u,1)
     # recovery from projected data
