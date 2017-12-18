@@ -7,12 +7,13 @@ and find optimal value with gradient descend and other faster method.
 """
 def costFunc(params,y,r,num_movie,num_user,num_feature,lamda=0.0):
     """
-    theta: estimated  value of unknown parameter
-    x: the input test data
-        number of rows means the how many input datas
-        number of cols means the how many features
-    y: the label of relative x
-    reg: if it is True, means using regularized linear. Default False
+    params: it includes the x and theta parameters.
+    y: the remark matrix
+    r: the matrix indicating whether users remark the movies
+    num_movie: number of movie
+    num_user: number of user
+    num_feature: number of feature
+    lamda: regularization parameter
     """
     x = params[0:num_movie*num_feature].reshape((num_movie,num_feature))
     theta = params[num_movie*num_feature:].reshape((num_user,num_feature))
@@ -24,14 +25,14 @@ def costFunc(params,y,r,num_movie,num_user,num_feature,lamda=0.0):
     return J
 
 def gradient(params,y,r,num_movie,num_user,num_feature,lamda=0.0):
-    """
-    theta: estimated  value of unknown parameter
-    x: the input test data
-        number of rows means the how many input datas
-        number of cols means the how many features
-    y: the label of relative x
-    reg: if it is True, means using regularized linear. Default False
-    return: the derivative of parameter
+        """
+    params: it includes the x and theta parameters.
+    y: the remark matrix
+    r: the matrix indicating whether users remark the movies
+    num_movie: number of movie
+    num_user: number of user
+    num_feature: number of feature
+    lamda: regularization parameter
     """
     lamda *= 1.0
     x = params[0:num_movie*num_feature].reshape((num_movie,num_feature))
